@@ -25,7 +25,7 @@ namespace MvcCoreAWSBlank
         public void ConfigureServices(IServiceCollection services)
         {
             String cadena = this.configure.GetConnectionString("awsmariadb");
-            services.AddDbContext<Context>(m => m.UseSqlServer(this.configure.GetConnectionString("postgres")));
+            services.AddDbContext<Context>(m => m.UseNpgsql(this.configure.GetConnectionString("postgres")));
 
             //services.AddDbContextPool<Context>(o => o.UseMySql(cadena, ServerVersion.AutoDetect(cadena)));
             services.AddTransient<Repository>();
