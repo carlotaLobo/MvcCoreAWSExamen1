@@ -24,7 +24,7 @@ namespace MvcCoreAWSBlank
         }
         public void ConfigureServices(IServiceCollection services)
         {
-            String cadena = this.configure.GetConnectionString("localmariadb");
+            String cadena = this.configure.GetConnectionString("awsmariadb");
             services.AddDbContextPool<Context>(o => o.UseMySql(cadena, ServerVersion.AutoDetect(cadena)));
             services.AddTransient<Repository>();
             services.AddControllersWithViews();
