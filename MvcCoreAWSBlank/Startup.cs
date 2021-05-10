@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Amazon.S3;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -10,7 +11,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using MvcCoreAWSBlank.Data;
-using MvcCoreAWSBlank.Repositories;
+
+using MvcCoreAWSBlank.Services;
 
 namespace MvcCoreAWSBlank
 {
@@ -25,10 +27,9 @@ namespace MvcCoreAWSBlank
         public void ConfigureServices(IServiceCollection services)
         {
             String cadena = this.configure.GetConnectionString("awsmariadb");
-            services.AddDbContext<Context>(m => m.UseNpgsql(this.configure.GetConnectionString("postgres")));
-
-            //services.AddDbContextPool<Context>(o => o.UseMySql(cadena, ServerVersion.AutoDetect(cadena)));
-            services.AddTransient<Repository>();
+            services.AddAWSService<IAmazonS3>();
+            services.AddTransient<PersonajesServiceDynamodb>();
+            services.AddTransient<PersonajesServiceS3>();
             services.AddControllersWithViews();
         }
 

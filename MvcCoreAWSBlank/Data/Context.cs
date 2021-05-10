@@ -10,6 +10,6 @@ namespace MvcCoreAWSBlank.Data
     public class Context:DbContext
     {
         public Context(DbContextOptions<Context> options) : base(options) { }
-        public DbSet<Coche> Coches { get; set; }
+        public DbSet<Personaje> Coches { get; set; }
     }
 }
