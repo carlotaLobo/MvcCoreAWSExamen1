@@ -48,8 +48,14 @@ namespace MvcCoreAWSBlank.Services
         public async Task<Stream> GetFile(String filename)
         {
             GetObjectResponse response = await this.awsClient.GetObjectAsync(this.bucketName, filename);
-            if (response.HttpStatusCode == System.Net.HttpStatusCode.OK) return response.ResponseStream;
+            if (response.HttpStatusCode == System.Net.HttpStatusCode.OK) { 
+
+            return response.ResponseStream;
+            } 
+            
             return null;
+
         }
+
     }
 }

@@ -31,16 +31,32 @@ namespace MvcCoreAWSBlank.Controllers
         [HttpPost]
         public async Task<IActionResult> CreatePersonaje(IFormFile imagen, Personaje personaje)
         {
-            //await this.servicedynamo.CreatePersonaje();
-
-            using (MemoryStream m = new MemoryStream())
+            
+            if (imagen != null)
             {
-                imagen.CopyTo(m);
-                await this.services3.UploadFile(m, imagen.FileName);
+                using (MemoryStream m = new MemoryStream())
+                {
+                    imagen.CopyTo(m);
+                    await this.services3.UploadFile(m, imagen.FileName);
+                    //Stream stream = await this.services3.GetFile(imagen.FileName);
+                }
+                personaje.Imagen = imagen.FileName;
             }
+            await this.servicedynamo.CreatePersonaje(personaje);
 
             return RedirectToAction("Index");
 
+        }
+        public async Task<IActionResult> Details(int id)
+        {
+            //Buscamos al personaje:
+            Personaje personaje = await this.servicedynamo.GetPersonaje(id);
+           
+            return View(personaje);
+        }
+        public async Task<IActionResult> FileAws(String file)
+        {
+            return File(await this.services3.GetFile(file), "image/png");
         }
     }
 }
