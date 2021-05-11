@@ -17,7 +17,7 @@ namespace MvcCoreAWSBlank.Services
         public PersonajesServiceS3(IAmazonS3 awsClient, IConfiguration configuration)
         {
             this.awsClient = awsClient;
-            this.bucketName = configuration["AWSS3: BucketName"];
+            this.bucketName = configuration["AWSS3:BucketName"];
         }
         public async Task<bool> UploadFile(Stream stream, String filename)
         {

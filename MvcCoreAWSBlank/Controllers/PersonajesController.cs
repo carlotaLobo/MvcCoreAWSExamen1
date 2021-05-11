@@ -4,6 +4,7 @@ using MvcCoreAWSBlank.Models;
 using MvcCoreAWSBlank.Services;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -23,14 +24,23 @@ namespace MvcCoreAWSBlank.Controllers
         {
             return View(await this.servicedynamo.GetPersonajes());
         }
-        public async IActionResult CreatePersonaje()
+        public IActionResult CreatePersonaje()
         {
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> CreatePersonaje(IFormFile imagen, Personaje personaje )
+        public async Task<IActionResult> CreatePersonaje(IFormFile imagen, Personaje personaje)
         {
-            await this.servicedynamo.CreatePersonaje()
+            //await this.servicedynamo.CreatePersonaje();
+
+            using (MemoryStream m = new MemoryStream())
+            {
+                imagen.CopyTo(m);
+                await this.services3.UploadFile(m, imagen.FileName);
+            }
+
+            return RedirectToAction("Index");
+
         }
     }
 }
