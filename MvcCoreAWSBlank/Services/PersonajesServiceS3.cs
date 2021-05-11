@@ -13,11 +13,13 @@ namespace MvcCoreAWSBlank.Services
     {
         private String bucketName;
         private IAmazonS3 awsClient;
+        private String url;
 
         public PersonajesServiceS3(IAmazonS3 awsClient, IConfiguration configuration)
         {
             this.awsClient = awsClient;
             this.bucketName = configuration["AWSS3:BucketName"];
+            this.url = configuration["AWSS3:urlbucket"];
         }
         public async Task<bool> UploadFile(Stream stream, String filename)
         {
@@ -56,6 +58,9 @@ namespace MvcCoreAWSBlank.Services
             return null;
 
         }
-
+        public String GetUrlFile(String filename)
+        {
+            return this.url + filename;
+        }
     }
 }

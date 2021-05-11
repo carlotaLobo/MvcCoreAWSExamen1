@@ -50,5 +50,9 @@ namespace MvcCoreAWSBlank.Services
             IEnumerable<Personaje> p = this.context.FromDocuments<Personaje>(data);
             return p.ToList();
         }
+        public async Task DeletePersonaje(int idpersonaje)
+        {
+            await this.context.DeleteAsync<Personaje>(idpersonaje);
+        }
     }
 }

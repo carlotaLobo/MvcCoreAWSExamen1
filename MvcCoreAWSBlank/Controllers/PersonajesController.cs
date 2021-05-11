@@ -46,7 +46,7 @@ namespace MvcCoreAWSBlank.Controllers
                     imagen.CopyTo(m);
                     await this.services3.UploadFile(m, imagen.FileName);
                 }
-                personaje.Imagen = imagen.FileName;
+                personaje.Imagen = this.services3.GetUrlFile(imagen.FileName);
             }
             if (incluirdesc != null)
             {
@@ -63,13 +63,23 @@ namespace MvcCoreAWSBlank.Controllers
         public async Task<IActionResult> Details(int id)
         {
             //Buscamos al personaje:
-            Personaje personaje = await this.servicedynamo.GetPersonaje(id);            
-
+            Personaje personaje = await this.servicedynamo.GetPersonaje(id);
+           
             return View(personaje);
         }
         public async Task<IActionResult> FileAws(String file)
         {
             return File(await this.services3.GetFile(file), "image/png");
+        }
+        public async Task<IActionResult> Delete(int id)
+        {
+            Personaje personaje = await this.servicedynamo.GetPersonaje(id);
+            await this.servicedynamo.DeletePersonaje(id);
+            String imagen = personaje.Imagen.Substring(personaje.Imagen.IndexOf(".com/") + 1, personaje.Imagen.Length - personaje.Imagen.IndexOf(".com/") - 1);
+            await this.servicedynamo.DeletePersonaje(id);
+            await this.services3.DeleteFile(imagen);
+           
+            return RedirectToAction("index");
         }
     }
 }
