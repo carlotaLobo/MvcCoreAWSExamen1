@@ -10,31 +10,37 @@
     <h4>Personaje</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.IdPersonaje)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.IdPersonaje)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Personaj)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Personaj)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Imagen)
         </dt>
+
         <dd class="col-sm-10">
             <a class="btn btn-info" asp-action="FileAws" asp-route-file="@Model.Imagen">view @Model.Imagen</a>
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.IdSerie)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.IdSerie)
         </dd>
     </dl>
+
+    @if (Model.Descripcion != null)
+    {
+        <h3>@Model.Descripcion.Ojos</h3> <h3>@Model.Descripcion.Genero</h3>
+    }
 </div>
 <div>
     @Html.ActionLink("Edit", "Edit", new {  id = Model.IdPersonaje  }) |

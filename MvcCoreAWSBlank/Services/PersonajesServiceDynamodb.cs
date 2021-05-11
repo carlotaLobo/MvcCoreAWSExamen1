@@ -11,22 +11,20 @@ using System.Threading.Tasks;
 
 namespace MvcCoreAWSBlank.Services
 {
-   
+
     public class PersonajesServiceDynamodb
     {
-        private DynamoDBContext context; 
+        private DynamoDBContext context;
 
         public PersonajesServiceDynamodb()
         {
             AmazonDynamoDBClient client = new AmazonDynamoDBClient();
             this.context = new DynamoDBContext(client);
         }
-
         public async Task CreatePersonaje(Personaje p)
         {
             await this.context.SaveAsync<Personaje>(p);
         }
-
         public async Task<List<Personaje>> GetPersonajes()
         {
             var tabla = this.context.GetTargetTable<Personaje>();
@@ -36,10 +34,21 @@ namespace MvcCoreAWSBlank.Services
             IEnumerable<Personaje> personajes = this.context.FromDocuments<Personaje>(data);
             return personajes.ToList();
         }
-
         public async Task<Personaje> GetPersonaje(int idpersonaje)
         {
             return await this.context.LoadAsync<Personaje>(idpersonaje);
+        }
+        public async Task<List<Personaje>> GetByNombrePelicula(String nombrepelicula)
+        {
+            var tabla = this.context.GetTargetTable<Personaje>();
+            ScanFilter scan = new ScanFilter();
+            scan.AddCondition("pelicula", ScanOperator.Equal, nombrepelicula);
+
+            var result = tabla.Scan(scan);
+
+            List<Document> data = await result.GetNextSetAsync();
+            IEnumerable<Personaje> p = this.context.FromDocuments<Personaje>(data);
+            return p.ToList();
         }
     }
 }

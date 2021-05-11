@@ -4,6 +4,7 @@ using MvcCoreAWSBlank.Models;
 using MvcCoreAWSBlank.Services;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -24,12 +25,18 @@ namespace MvcCoreAWSBlank.Controllers
         {
             return View(await this.servicedynamo.GetPersonajes());
         }
+        [HttpPost]
+        public async Task<IActionResult> Index(String nombrepelicula)
+        {
+            return View(await this.servicedynamo.GetByNombrePelicula(nombrepelicula));
+        }
         public IActionResult CreatePersonaje()
         {
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> CreatePersonaje(IFormFile imagen, Personaje personaje)
+        public async Task<IActionResult> CreatePersonaje(IFormFile imagen,
+            Personaje personaje, String incluirdesc, String ojos, String genero)
         {
             
             if (imagen != null)
@@ -38,9 +45,15 @@ namespace MvcCoreAWSBlank.Controllers
                 {
                     imagen.CopyTo(m);
                     await this.services3.UploadFile(m, imagen.FileName);
-                    //Stream stream = await this.services3.GetFile(imagen.FileName);
                 }
                 personaje.Imagen = imagen.FileName;
+            }
+            if (incluirdesc != null)
+            {
+               Descripcion d = new Descripcion();
+                d.Genero = genero;
+                d.Ojos = ojos;
+                personaje.Descripcion = d;
             }
             await this.servicedynamo.CreatePersonaje(personaje);
 
@@ -50,8 +63,8 @@ namespace MvcCoreAWSBlank.Controllers
         public async Task<IActionResult> Details(int id)
         {
             //Buscamos al personaje:
-            Personaje personaje = await this.servicedynamo.GetPersonaje(id);
-           
+            Personaje personaje = await this.servicedynamo.GetPersonaje(id);            
+
             return View(personaje);
         }
         public async Task<IActionResult> FileAws(String file)
